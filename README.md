@@ -4,7 +4,7 @@ Static page for testing the Enviso ticketing widget on GitHub Pages (HTTPS).
 
 ## What this is
 
-- Pure static files: `index.html`, `app.js`, `steps.html`, `steps.js`, `styles.css`
+- Pure static files: `index.html`, `app.js`, `styles.css` (all-in-one) and `steps.html`, `steps.js`, `shop.css` (demo shop)
 - Staging widget scripts from `widget.staging-enviso.io`
 - Default API base: `https://api.staging-enviso.io/ticketwidgetapi/`
 - No secrets in the repository
@@ -33,24 +33,29 @@ https://<user>.github.io/<repo>/?apikey=YOUR_KEY&salespoint=YOUR_SALESPOINT&offe
 
 Values are read from the query string at runtime and are not saved to browser storage, cookies, or log files by this demo.
 
-## Custom flow (`steps.html`)
+## Demo shop (`steps.html`)
 
-`steps.html` + `steps.js` build the booking flow from individual step components instead of the all-in-one widget,
-with an own German stepper, own buttons and a small event log (event names and non-personal fields only).
-It takes the same URL parameters (`apikey`, `salespoint`, `offers`, `lang`, `locale`, `apiurl`); `lang`/`locale` default to `de`/`de-DE`.
+`steps.html` + `steps.js` + `shop.css` are a fictional demo ticket shop ("Demo Erlebniswelt") built from the
+individual Enviso step components instead of the all-in-one widget. Same URL parameters
+(`apikey`, `salespoint`, `offers`, `lang`, `locale`, `apiurl`); `lang`/`locale` default to `de`/`de-DE`.
 
-Steps and components:
+Structure (hash routes):
 
-1. Offer – `<enviso-offer-overview included-offer-ids="[…]" offer-type="ticket">`, event `buyticketsclick`
-2. Tickets – `<enviso-ticket-selection-step offer-id offer-type>`, read `values` / `requiredTickets`, `checkValidity(true, true)`
-3. Date & time – `<enviso-time-selection-step offer-id required-tickets>` (skipped for offers with capacity "Total")
-4. Add to basket – the page itself calls `POST {apiurl}reservations?salespointid=…` (same call the built-in ticket flow makes), then `enviso.basket.refresh()`
-5. Basket – `<enviso-basket-overview>`
-6. Customer info – `<enviso-basket-my-info>`, `checkValidity()`
-7. Payment – `<enviso-payment-step>` creates the order as soon as it becomes visible; events `ordercreated`, `orderfailed`, `paymentverified`, `paymentfailed`
-8. Done – `<enviso-ticket-order-complete-step order-id status failed>`
+- `#start` – header, hero, featured offers, "how it works", footer with demo placeholders
+- `#tickets` – offer cards rendered from the ticketing widget API (`salespoints/{id}/offers`)
+- `#buchen/{offerId}` – progress bar; `<enviso-ticket-selection-step>` then `<enviso-time-selection-step>`
+  (skipped for offers with capacity "Total"); "In den Warenkorb" calls `POST {apiurl}reservations?salespointid=…`
+  (same call the built-in ticket flow makes), then `enviso.basket.refresh()`
+- `#warenkorb` – `<enviso-basket-overview>` plus own summary from `enviso.basket` (quantity +/−, remove, total, expiry)
+- `#kasse` – `<enviso-basket-my-info>` → `<enviso-payment-step>` (creates the order when shown; mounted once after confirmation)
+  → `<enviso-ticket-order-complete-step>`
 
-Note: the widget itself keeps its basket session and the entered customer data in the browser's localStorage (same as the all-in-one widget). This demo stores no keys.
+Header mini-cart (drawer) with item badge, updated on the `enviso.basket` `change` event.
+"Entwickler-Infos" switch toggles the "Was passiert hier?" boxes and the developer panel (event log with
+event names and non-personal fields only).
+
+Note: the widget itself keeps its basket session and the entered customer data in the browser's localStorage
+(same as the all-in-one widget). This demo stores no keys.
 
 ## Local preview
 

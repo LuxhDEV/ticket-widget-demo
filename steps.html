@@ -5,110 +5,313 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex,nofollow">
-  <title>Eigener Buchungsablauf – Step-Komponenten</title>
-  <link rel="stylesheet" href="./styles.css">
+  <title>Demo Erlebniswelt – Ticketshop (Demo)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shop.css">
 </head>
-<body>
-  <main>
-    <h1>Eigener Buchungsablauf</h1>
-    <p class="lead">
-      Staging-Demo: eigene Navigation, jeder Schritt wird von einer einzelnen Enviso-Step-Komponente gerendert.
-      Zugangsdaten kommen nur aus der URL und werden nicht gespeichert.
-      <a href="./index.html">Zum Komplett-Widget</a>
-    </p>
+<body class="dev-on">
+  <a class="skip" href="#main">Zum Inhalt</a>
 
-    <section id="setup" class="card notice hidden" aria-live="polite">
-      <h2>Konfiguration fehlt</h2>
-      <p>Diese Seite braucht URL-Parameter:</p>
-      <ul>
-        <li><code>apikey</code> – Widget-API-Key (Pflicht)</li>
-        <li><code>salespoint</code> – Salespoint-ID (Pflicht)</li>
-        <li><code>offers</code> – optionale Angebots-IDs, kommagetrennt</li>
-        <li><code>lang</code> / <code>locale</code> – optional, Standard <code>de</code> / <code>de-DE</code></li>
-        <li><code>apiurl</code> – optionale API-Basis, Standard Staging</li>
-      </ul>
-      <p>Beispiel (Platzhalter): <code>steps.html?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
-    </section>
+  <div class="demo-banner" role="note">
+    Demo-Shop in einer Testumgebung – es wird nichts Echtes verkauft. Nur Testdaten und Testkarten verwenden.
+  </div>
 
-    <div id="app" class="hidden">
-      <nav class="stepper" aria-label="Buchungsschritte">
-        <ol id="stepper"></ol>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#start" aria-label="Demo Erlebniswelt – Startseite">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="logo-text">Demo <strong>Erlebniswelt</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hauptnavigation">
+        <a href="#start" data-nav="start">Start</a>
+        <a href="#tickets" data-nav="tickets">Tickets</a>
+        <a href="#warenkorb" data-nav="warenkorb">Warenkorb</a>
       </nav>
-
-      <div class="layout">
-        <div class="steps-col">
-          <section class="card step" data-step="offer" aria-labelledby="h-offer">
-            <h2 id="h-offer">Angebot wählen</h2>
-            <p class="hint">Klick bei einem Angebot auf „Tickets“.</p>
-            <div class="mount" id="mount-offer"></div>
-          </section>
-
-          <section class="card step" data-step="tickets" aria-labelledby="h-tickets">
-            <h2 id="h-tickets">Tickets wählen</h2>
-            <p class="hint">Anzahl pro Ticketart festlegen.</p>
-            <div class="mount" id="mount-tickets"></div>
-            <div class="actions">
-              <button type="button" class="btn" data-action="back">Zurück</button>
-              <button type="button" class="btn primary" data-action="tickets-next">Weiter</button>
-            </div>
-          </section>
-
-          <section class="card step" data-step="time" aria-labelledby="h-time">
-            <h2 id="h-time">Datum &amp; Uhrzeit</h2>
-            <p class="hint">Tag und – falls angeboten – Zeitfenster wählen.</p>
-            <div class="mount" id="mount-time"></div>
-            <div class="actions">
-              <button type="button" class="btn" data-action="back">Zurück</button>
-              <button type="button" class="btn primary" data-action="add-to-basket">In den Warenkorb</button>
-            </div>
-          </section>
-
-          <section class="card step" data-step="basket" aria-labelledby="h-basket">
-            <h2 id="h-basket">Warenkorb</h2>
-            <p class="hint">Reservierungen prüfen. Mengen lassen sich hier noch ändern.</p>
-            <div class="mount" id="mount-basket"></div>
-            <div class="actions">
-              <button type="button" class="btn" data-action="more">Weitere Tickets</button>
-              <button type="button" class="btn primary" data-action="basket-next">Weiter zu deinen Daten</button>
-            </div>
-          </section>
-
-          <section class="card step" data-step="info" aria-labelledby="h-info">
-            <h2 id="h-info">Deine Daten</h2>
-            <p class="hint">Nur neutrale Testdaten verwenden.</p>
-            <div class="mount" id="mount-info"></div>
-            <div class="actions">
-              <button type="button" class="btn" data-action="back">Zurück</button>
-              <button type="button" class="btn primary" data-action="info-next">Bestellung anlegen &amp; bezahlen</button>
-            </div>
-          </section>
-
-          <section class="card step" data-step="payment" aria-labelledby="h-payment">
-            <h2 id="h-payment">Zahlung</h2>
-            <p class="hint">Nur Testkarten der Zahlungs-Testumgebung verwenden.</p>
-            <div class="mount" id="mount-payment"></div>
-          </section>
-
-          <section class="card step" data-step="done" aria-labelledby="h-done">
-            <h2 id="h-done">Abschluss</h2>
-            <p class="hint">Status im Browser ist kein Zahlungsnachweis – serverseitig prüfen.</p>
-            <div class="mount" id="mount-done"></div>
-            <div class="actions">
-              <button type="button" class="btn" data-action="restart">Neue Buchung</button>
-            </div>
-          </section>
-
-          <p id="status" class="status" aria-live="polite"></p>
-        </div>
-
-        <aside class="card log-col" aria-label="Event-Log">
-          <h2>Event-Log</h2>
-          <p class="hint">Nur Eventnamen und nicht-persönliche Felder.</p>
-          <ol id="eventlog" class="eventlog"></ol>
-        </aside>
+      <div class="header-actions">
+        <label class="switch" title="Erklärboxen und Entwickler-Panel ein-/ausblenden">
+          <input type="checkbox" id="dev-toggle" checked>
+          <span class="switch-ui" aria-hidden="true"></span>
+          <span class="switch-label">Entwickler-Infos</span>
+        </label>
+        <button type="button" class="cart-btn" id="cart-btn" aria-haspopup="dialog" aria-controls="drawer">
+          <span class="cart-icon" aria-hidden="true"></span>
+          <span class="sr-only">Warenkorb öffnen</span>
+          <span class="badge" id="cart-badge" aria-live="polite">0</span>
+        </button>
       </div>
     </div>
+  </header>
+
+  <main id="main">
+    <!-- Setup hint (missing URL params) -->
+    <section id="setup" class="wrap view-setup hidden">
+      <div class="panel">
+        <h1>Konfiguration fehlt</h1>
+        <p>Der Demo-Shop braucht URL-Parameter:</p>
+        <ul>
+          <li><code>apikey</code> – Widget-API-Key (Pflicht)</li>
+          <li><code>salespoint</code> – Salespoint-ID (Pflicht)</li>
+          <li><code>offers</code> – optionale Angebots-IDs, kommagetrennt</li>
+          <li><code>lang</code> / <code>locale</code> – optional, Standard <code>de</code> / <code>de-DE</code></li>
+          <li><code>apiurl</code> – optionale API-Basis, Standard Staging</li>
+        </ul>
+        <p>Beispiel: <code>steps.html?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
+        <p><a href="./index.html">Zum Komplett-Widget</a></p>
+      </div>
+    </section>
+
+    <!-- START -->
+    <section class="view" data-view="start" aria-label="Startseite">
+      <div class="hero">
+        <div class="wrap hero-inner">
+          <div class="hero-text">
+            <p class="eyebrow">Willkommen in der</p>
+            <h1>Demo Erlebniswelt</h1>
+            <p class="hero-lead">Tageskarten, Zeitfenster-Tickets und mehr – online buchen, ohne Warteschlange.</p>
+            <div class="hero-cta">
+              <a class="btn btn-primary btn-lg" href="#tickets">Tickets kaufen</a>
+              <a class="btn btn-ghost btn-lg" href="#info">So funktioniert's</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+            <div class="ticket-art">
+              <span class="ta-title">TAGESTICKET</span>
+              <span class="ta-sub">Demo Erlebniswelt</span>
+              <span class="ta-code"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap section">
+        <div class="section-head">
+          <h2>Beliebte Tickets</h2>
+          <a href="#tickets" class="link-more">Alle Angebote →</a>
+        </div>
+        <div class="offer-grid" id="featured-offers"><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+      </div>
+
+      <div class="wrap section" id="info">
+        <h2>So funktioniert's</h2>
+        <ol class="howto">
+          <li><span class="howto-n">1</span><strong>Angebot wählen</strong><span>Tageskarte oder Zeitfenster.</span></li>
+          <li><span class="howto-n">2</span><strong>Tickets &amp; Termin</strong><span>Anzahl, Datum und ggf. Uhrzeit.</span></li>
+          <li><span class="howto-n">3</span><strong>Warenkorb</strong><span>Weitere Tickets hinzufügen oder ändern.</span></li>
+          <li><span class="howto-n">4</span><strong>Bezahlen</strong><span>Daten eingeben, Ticket per E-Mail.</span></li>
+        </ol>
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Diese Seite ist komplett eigenes HTML/CSS. Die Enviso-Web-Components werden einmal über den Staging-Loader
+          (<code>loader.js</code> + <code>enviso.load([...])</code>) geladen und erst in den einzelnen Buchungsschritten eingebaut.
+          Konfiguration über <code>window.enviso.settings</code> (<code>apiKey</code>, <code>salesPointId</code>, <code>language</code>, <code>locale</code>, <code>ticketingWidgetApi</code>) – Werte nur aus der URL.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKETS (offer list) -->
+    <section class="view" data-view="tickets" aria-label="Tickets">
+      <div class="page-head"><div class="wrap"><h1>Tickets</h1><p>Wähle ein Angebot, um zu buchen.</p></div></div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Die Karten rendern wir selbst aus der Ticketwidget-API: <code>GET salespoints/{id}/offers?includedofferids=…&amp;offertype=ticket</code>
+          plus Detail <code>GET salespoints/{id}/offers/{offerId}</code> (Preis, Kapazitätsart). Das ist derselbe Endpunkt, den
+          <code>&lt;enviso-offer-overview&gt;</code> nutzt; eigene Karten passen aber besser ins Shop-Design.
+          Klick auf „Tickets wählen“ startet den Buchungsablauf.</p>
+        </div>
+        <div class="offer-grid" id="all-offers"><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+      </div>
+    </section>
+
+    <!-- BOOKING FLOW (tickets/date) -->
+    <section class="view" data-view="buchen" aria-label="Buchung">
+      <div class="page-head"><div class="wrap">
+        <a href="#tickets" class="back-link">← Alle Angebote</a>
+        <h1 id="booking-title">Buchung</h1>
+      </div></div>
+      <div class="wrap"><ol class="progress" data-progress></ol></div>
+      <div class="wrap section two-col">
+        <div class="col-main">
+          <div class="step-panel" data-substep="tickets">
+            <h2>Tickets wählen</h2>
+            <div class="devinfo">
+              <h3>Was passiert hier?</h3>
+              <p>Komponente <code>&lt;enviso-ticket-selection-step offer-id offer-type&gt;</code>
+              (Bundle <code>common/enviso-tickets/enviso-ticket-selection-step-element.js</code>). Wir lesen danach
+              <code>values</code>, <code>requiredTickets</code> und prüfen mit <code>checkValidity(true, true)</code>.
+              Event: <code>change</code>.</p>
+            </div>
+            <div class="mount card-surface" id="mount-tickets"></div>
+            <div class="actions">
+              <a class="btn btn-ghost" href="#tickets">Zurück</a>
+              <button type="button" class="btn btn-primary" data-action="tickets-next">Weiter</button>
+            </div>
+          </div>
+
+          <div class="step-panel" data-substep="time">
+            <h2>Datum &amp; Uhrzeit</h2>
+            <div class="devinfo">
+              <h3>Was passiert hier?</h3>
+              <p>Komponente <code>&lt;enviso-time-selection-step offer-id required-tickets&gt;</code>. Wichtig:
+              <code>required-tickets</code> muss gesetzt sein, bevor der Schritt sichtbar wird – deshalb erzeugen wir das Element erst jetzt.
+              Danach lesen wir <code>selectedDate</code> (yyyy-MM-dd) und <code>selectedTimeslot.id</code>.
+              „In den Warenkorb“ macht dann <strong>unseren eigenen</strong> Call <code>POST reservations?salespointid=…</code>
+              (gleicher Endpunkt wie im Komplett-Widget) und danach <code>enviso.basket.refresh()</code>.</p>
+            </div>
+            <div class="mount card-surface" id="mount-time"></div>
+            <div class="actions">
+              <button type="button" class="btn btn-ghost" data-action="time-back">Zurück</button>
+              <button type="button" class="btn btn-primary" data-action="add-to-basket">In den Warenkorb</button>
+            </div>
+          </div>
+        </div>
+        <aside class="col-side">
+          <div class="summary-card" id="booking-summary">
+            <h3>Deine Auswahl</h3>
+            <dl class="sum-list" id="booking-sum"></dl>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- BASKET -->
+    <section class="view" data-view="warenkorb" aria-label="Warenkorb">
+      <div class="page-head"><div class="wrap"><h1>Warenkorb</h1><p id="expiry-text" class="expiry"></p></div></div>
+      <div class="wrap"><ol class="progress" data-progress></ol></div>
+      <div class="wrap section two-col">
+        <div class="col-main">
+          <div class="devinfo">
+            <h3>Was passiert hier?</h3>
+            <p>Links: <code>&lt;enviso-basket-overview&gt;</code> – zeigt den globalen Enviso-Warenkorb inkl. Mengenänderung und Löschen.
+            Rechts und im Header-Warenkorb: unsere eigene Darstellung aus <code>enviso.basket.getBasketItemsArray()</code>
+            (dokumentiert) plus <code>totalPriceWithDiscount</code>, <code>expiryDate</code>,
+            <code>updateReservation(produktReservierungsId, menge)</code> und <code>removeReservation(reservierungsId)</code>
+            (vom Widget-Objekt, nicht offiziell dokumentiert). Das Badge aktualisiert sich bei <code>enviso.basket</code>-Event <code>change</code>.</p>
+          </div>
+          <div class="mount card-surface" id="mount-basket"></div>
+          <div class="actions">
+            <a class="btn btn-ghost" href="#tickets">Weiter einkaufen</a>
+            <a class="btn btn-primary" href="#kasse" data-needs-items>Zur Kasse</a>
+          </div>
+        </div>
+        <aside class="col-side">
+          <div class="summary-card">
+            <h3>Übersicht</h3>
+            <div class="cart-list" data-cart-list></div>
+            <div class="cart-total"><span>Gesamt</span><strong data-cart-total>0,00 €</strong></div>
+            <a class="btn btn-primary btn-block" href="#kasse" data-needs-items>Zur Kasse</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CHECKOUT -->
+    <section class="view" data-view="kasse" aria-label="Kasse">
+      <div class="page-head"><div class="wrap"><h1>Kasse</h1></div></div>
+      <div class="wrap"><ol class="progress" data-progress></ol></div>
+      <div class="wrap section two-col">
+        <div class="col-main">
+          <div class="step-panel" data-substep="info">
+            <h2>Deine Daten</h2>
+            <div class="devinfo">
+              <h3>Was passiert hier?</h3>
+              <p>Komponente <code>&lt;enviso-basket-my-info&gt;</code> (enthält <code>&lt;enviso-customer-info&gt;</code>; Felder kommen aus dem
+              Formular des Angebots). Wir prüfen mit <code>checkValidity()</code>. Die Daten speichert das Widget selbst im Warenkorb-Objekt
+              (<code>enviso.basket.customer</code>). Bitte nur neutrale Testdaten.</p>
+            </div>
+            <div class="mount card-surface" id="mount-info"></div>
+            <div class="actions">
+              <a class="btn btn-ghost" href="#warenkorb">Zurück zum Warenkorb</a>
+              <button type="button" class="btn btn-primary" data-action="info-next">Zahlungspflichtig bestellen</button>
+            </div>
+          </div>
+
+          <div class="step-panel" data-substep="payment">
+            <h2>Zahlung</h2>
+            <div class="devinfo">
+              <h3>Was passiert hier?</h3>
+              <p>Komponente <code>&lt;enviso-payment-step&gt;</code>: <strong>legt die Bestellung an, sobald sie sichtbar wird</strong>
+              (Event <code>ordercreated</code> mit Bestellnummer) und startet die Zahlung (Adyen im Testmodus).
+              Ergebnis-Events: <code>paymentverified</code>, <code>paymentfailed</code>, <code>orderfailed</code>.
+              Deshalb wird sie nur einmal nach Bestätigung eingebaut. Hinweis: Auf dieser Domain melden die Kartenfelder
+              aktuell „Invalid origin“ (Freigabe fehlt beim Anbieter).</p>
+            </div>
+            <div class="mount card-surface" id="mount-payment"></div>
+          </div>
+
+          <div class="step-panel" data-substep="done">
+            <h2>Abschluss</h2>
+            <div class="devinfo">
+              <h3>Was passiert hier?</h3>
+              <p>Komponente <code>&lt;enviso-ticket-order-complete-step order-id status failed&gt;</code> – Werte setzen wir aus
+              <code>ordercreated</code>/<code>paymentverified</code>. Ein Browser-Event ist kein Zahlungsnachweis: Status immer serverseitig prüfen.</p>
+            </div>
+            <div class="mount card-surface" id="mount-done"></div>
+            <div class="actions"><button type="button" class="btn btn-primary" data-action="restart">Neue Buchung</button></div>
+          </div>
+        </div>
+        <aside class="col-side">
+          <div class="summary-card">
+            <h3>Bestellübersicht</h3>
+            <div class="cart-list" data-cart-list data-readonly></div>
+            <div class="cart-total"><span>Gesamt</span><strong data-cart-total>0,00 €</strong></div>
+            <p class="small muted" id="order-ref"></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="wrap"><p id="status" class="status" aria-live="polite"></p></div>
   </main>
+
+  <!-- Mini cart drawer -->
+  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+    <div class="drawer-head">
+      <h2 id="drawer-title">Dein Warenkorb</h2>
+      <button type="button" class="icon-btn" data-action="close-drawer" aria-label="Schließen">×</button>
+    </div>
+    <p class="expiry small" data-expiry></p>
+    <div class="cart-list" data-cart-list></div>
+    <div class="drawer-foot">
+      <div class="cart-total"><span>Gesamt</span><strong data-cart-total>0,00 €</strong></div>
+      <a class="btn btn-primary btn-block" href="#warenkorb" data-action="close-drawer">Zum Warenkorb</a>
+      <a class="btn btn-ghost btn-block" href="#tickets" data-action="close-drawer">Weiter einkaufen</a>
+    </div>
+  </aside>
+
+  <!-- Developer panel -->
+  <details class="dev-panel" id="dev-panel">
+    <summary>Entwickler-Panel <span class="dev-count" id="dev-count">0</span></summary>
+    <div class="dev-body">
+      <p class="small muted">Event-Log: nur Eventnamen und nicht-persönliche Felder. Konfiguration: <span id="dev-config"></span></p>
+      <ol id="eventlog" class="eventlog"></ol>
+    </div>
+  </details>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <div class="logo logo-footer"><span class="logo-mark" aria-hidden="true"></span><span class="logo-text">Demo <strong>Erlebniswelt</strong></span></div>
+        <p class="small">Fiktiver Demo-Shop zum Testen von Ticket-Web-Components in einer Staging-Umgebung.</p>
+      </div>
+      <div>
+        <h3>Impressum (Demo)</h3>
+        <p class="small">Platzhalter – keine echten Angaben. Demo Erlebniswelt, Musterstraße 1, 00000 Musterstadt.</p>
+      </div>
+      <div>
+        <h3>Datenschutz (Demo)</h3>
+        <p class="small">Platzhalter – Testseite. Bitte keine echten personenbezogenen Daten eingeben.</p>
+      </div>
+      <div>
+        <h3>Weitere Ansichten</h3>
+        <p class="small"><a id="aio-link" href="./index.html">Komplett-Widget (ein Code-Schnipsel)</a></p>
+      </div>
+    </div>
+    <div class="wrap footer-bottom small">© Demo – nur zu Testzwecken</div>
+  </footer>
+
   <script src="./steps.js"></script>
 </body>
 </html>
