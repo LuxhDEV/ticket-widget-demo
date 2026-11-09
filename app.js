@@ -132,7 +132,13 @@
     });
   }
 
+  function carryQueryToStepsLink() {
+    var a = document.getElementById('steps-link');
+    if (a && window.location.search) a.href = './steps.html' + window.location.search;
+  }
+
   function start() {
+    carryQueryToStepsLink();
     var config = readConfig(qs());
     var missing = [];
     if (!config.apiKey) missing.push('apikey');

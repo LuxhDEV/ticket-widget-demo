@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Eigener Buchungsablauf – Step-Komponenten</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <h1>Eigener Buchungsablauf</h1>
+    <p class="lead">
+      Staging-Demo: eigene Navigation, jeder Schritt wird von einer einzelnen Enviso-Step-Komponente gerendert.
+      Zugangsdaten kommen nur aus der URL und werden nicht gespeichert.
+      <a href="./index.html">Zum Komplett-Widget</a>
+    </p>
+
+    <section id="setup" class="card notice hidden" aria-live="polite">
+      <h2>Konfiguration fehlt</h2>
+      <p>Diese Seite braucht URL-Parameter:</p>
+      <ul>
+        <li><code>apikey</code> – Widget-API-Key (Pflicht)</li>
+        <li><code>salespoint</code> – Salespoint-ID (Pflicht)</li>
+        <li><code>offers</code> – optionale Angebots-IDs, kommagetrennt</li>
+        <li><code>lang</code> / <code>locale</code> – optional, Standard <code>de</code> / <code>de-DE</code></li>
+        <li><code>apiurl</code> – optionale API-Basis, Standard Staging</li>
+      </ul>
+      <p>Beispiel (Platzhalter): <code>steps.html?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
+    </section>
+
+    <div id="app" class="hidden">
+      <nav class="stepper" aria-label="Buchungsschritte">
+        <ol id="stepper"></ol>
+      </nav>
+
+      <div class="layout">
+        <div class="steps-col">
+          <section class="card step" data-step="offer" aria-labelledby="h-offer">
+            <h2 id="h-offer">Angebot wählen</h2>
+            <p class="hint">Klick bei einem Angebot auf „Tickets“.</p>
+            <div class="mount" id="mount-offer"></div>
+          </section>
+
+          <section class="card step" data-step="tickets" aria-labelledby="h-tickets">
+            <h2 id="h-tickets">Tickets wählen</h2>
+            <p class="hint">Anzahl pro Ticketart festlegen.</p>
+            <div class="mount" id="mount-tickets"></div>
+            <div class="actions">
+              <button type="button" class="btn" data-action="back">Zurück</button>
+              <button type="button" class="btn primary" data-action="tickets-next">Weiter</button>
+            </div>
+          </section>
+
+          <section class="card step" data-step="time" aria-labelledby="h-time">
+            <h2 id="h-time">Datum &amp; Uhrzeit</h2>
+            <p class="hint">Tag und – falls angeboten – Zeitfenster wählen.</p>
+            <div class="mount" id="mount-time"></div>
+            <div class="actions">
+              <button type="button" class="btn" data-action="back">Zurück</button>
+              <button type="button" class="btn primary" data-action="add-to-basket">In den Warenkorb</button>
+            </div>
+          </section>
+
+          <section class="card step" data-step="basket" aria-labelledby="h-basket">
+            <h2 id="h-basket">Warenkorb</h2>
+            <p class="hint">Reservierungen prüfen. Mengen lassen sich hier noch ändern.</p>
+            <div class="mount" id="mount-basket"></div>
+            <div class="actions">
+              <button type="button" class="btn" data-action="more">Weitere Tickets</button>
+              <button type="button" class="btn primary" data-action="basket-next">Weiter zu deinen Daten</button>
+            </div>
+          </section>
+
+          <section class="card step" data-step="info" aria-labelledby="h-info">
+            <h2 id="h-info">Deine Daten</h2>
+            <p class="hint">Nur neutrale Testdaten verwenden.</p>
+            <div class="mount" id="mount-info"></div>
+            <div class="actions">
+              <button type="button" class="btn" data-action="back">Zurück</button>
+              <button type="button" class="btn primary" data-action="info-next">Bestellung anlegen &amp; bezahlen</button>
+            </div>
+          </section>
+
+          <section class="card step" data-step="payment" aria-labelledby="h-payment">
+            <h2 id="h-payment">Zahlung</h2>
+            <p class="hint">Nur Testkarten der Zahlungs-Testumgebung verwenden.</p>
+            <div class="mount" id="mount-payment"></div>
+          </section>
+
+          <section class="card step" data-step="done" aria-labelledby="h-done">
+            <h2 id="h-done">Abschluss</h2>
+            <p class="hint">Status im Browser ist kein Zahlungsnachweis – serverseitig prüfen.</p>
+            <div class="mount" id="mount-done"></div>
+            <div class="actions">
+              <button type="button" class="btn" data-action="restart">Neue Buchung</button>
+            </div>
+          </section>
+
+          <p id="status" class="status" aria-live="polite"></p>
+        </div>
+
+        <aside class="card log-col" aria-label="Event-Log">
+          <h2>Event-Log</h2>
+          <p class="hint">Nur Eventnamen und nicht-persönliche Felder.</p>
+          <ol id="eventlog" class="eventlog"></ol>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <script src="./steps.js"></script>
+</body>
+</html>
