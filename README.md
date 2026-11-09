@@ -57,6 +57,32 @@ event names and non-personal fields only).
 Note: the widget itself keeps its basket session and the entered customer data in the browser's localStorage
 (same as the all-in-one widget). This demo stores no keys.
 
+## Widget-only shop (`shop.html`)
+
+`shop.html` + `shop-simple.js` (+ `shop.css` for the page layout) show the same demo shop built **only from official,
+documented widget elements**. Same URL parameters. No own API calls, no own offer cards, nothing written to storage by
+the page script.
+
+| Section | Element |
+|---|---|
+| Header basket icon (with item count) | `<enviso-basket-button>` inside a plain link to `#warenkorb` |
+| `#tickets` | `<enviso-offer-overview offer-type="ticket" included-offer-ids="[…]" sort-by-include-offer-ids>` |
+| `#buchen` | `<enviso-ticket-flow offer-id="…">` (ticket selection, date/time slot, "add to basket" – all inside the element) |
+| `#warenkorb` | `<enviso-basket-flow>` (order overview with edit/remove → my info → payment) and `<enviso-basket-expiry-countdown threshold="30">` |
+| `#fertig` | `<enviso-ticket-order-complete-step>` |
+
+`shop-simple.js` only: reads URL parameters into `window.enviso.settings` and loads the components; shows/hides
+sections on hash change; on `buyticketsclick` creates `<enviso-ticket-flow>` with that `offer-id`; on
+`ordercreated` / `paymentverified` / `paymentfailed` / `orderfailed` shows the order-complete element with the
+matching attributes.
+
+Limitations compared with `steps.html`: the ticket flow fires no documented "added to basket" event, so the page
+does not switch to the basket by itself (the header icon counts up; the user clicks "Zum Warenkorb"); no own mini-cart
+or drawer; offer cards and all forms use the widget's design (adjust via theme variables/CSS parts only).
+
+Component paths: the docs list `basket/enviso-basket-expiry-countdown.js`; the staging CDN serves the bundle as
+`basket/enviso-basket-expiry-countdown-element.js`.
+
 ## Local preview
 
 Any static file server works, for example:

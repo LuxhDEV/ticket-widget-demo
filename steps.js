@@ -806,6 +806,8 @@
     state.config = config;
     var aio = $('#aio-link');
     if (aio && window.location.search) aio.href = './index.html' + window.location.search;
+    var shopLink = $('#shop-link');
+    if (shopLink && window.location.search) shopLink.href = './shop.html' + window.location.search;
 
     if (!config.apiKey || !Number.isFinite(config.salesPointId) || config.salesPointId <= 0) {
       $all('.view').forEach(function (v) { v.classList.remove('active'); });

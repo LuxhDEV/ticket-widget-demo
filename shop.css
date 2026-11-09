@@ -233,3 +233,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
   .howto, .footer-grid { grid-template-columns: 1fr; }
   .page-head h1 { font-size: 1.6rem; }
 }
+
+/* shop.html (widget-only variant) */
+.widget-basket-link { display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+.page-head enviso-basket-expiry-countdown { display: block; margin-top: .5rem; }

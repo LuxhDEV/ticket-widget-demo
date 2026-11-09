@@ -135,6 +135,8 @@
   function carryQueryToStepsLink() {
     var a = document.getElementById('steps-link');
     if (a && window.location.search) a.href = './steps.html' + window.location.search;
+    var b = document.getElementById('shop-link');
+    if (b && window.location.search) b.href = './shop.html' + window.location.search;
   }
 
   function start() {

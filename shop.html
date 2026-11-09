@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Demo Erlebniswelt – Ticketshop (nur Widget-Elemente)</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shop.css">
+</head>
+<body class="dev-on">
+  <a class="skip" href="#main">Zum Inhalt</a>
+  <div class="demo-banner" role="note">
+    Demo-Shop in einer Testumgebung – es wird nichts Echtes verkauft. Nur Testdaten und Testkarten verwenden.
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#start" aria-label="Demo Erlebniswelt – Startseite">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="logo-text">Demo <strong>Erlebniswelt</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hauptnavigation">
+        <a href="#start" data-nav="start">Start</a>
+        <a href="#tickets" data-nav="tickets">Tickets</a>
+        <a href="#warenkorb" data-nav="warenkorb">Warenkorb</a>
+      </nav>
+      <div class="header-actions">
+        <label class="switch" title="Erklärboxen und Entwickler-Panel ein-/ausblenden">
+          <input type="checkbox" id="dev-toggle" checked>
+          <span class="switch-ui" aria-hidden="true"></span>
+          <span class="switch-label">Entwickler-Infos</span>
+        </label>
+        <!-- Official widget element: basket icon with item count. Plain link around it for navigation. -->
+        <a class="widget-basket-link" href="#warenkorb" aria-label="Zum Warenkorb">
+          <enviso-basket-button></enviso-basket-button>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="setup" class="wrap hidden">
+      <div class="panel">
+        <h1>Konfiguration fehlt</h1>
+        <p>URL-Parameter: <code>apikey</code> und <code>salespoint</code> (Pflicht), optional <code>offers</code>, <code>lang</code>, <code>locale</code>, <code>apiurl</code>.</p>
+        <p>Beispiel: <code>shop.html?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
+      </div>
+    </section>
+
+    <!-- START -->
+    <section class="view" data-view="start" aria-label="Startseite">
+      <div class="hero">
+        <div class="wrap hero-inner">
+          <div class="hero-text">
+            <p class="eyebrow">Willkommen in der</p>
+            <h1>Demo Erlebniswelt</h1>
+            <p class="hero-lead">Tageskarten und Zeitfenster-Tickets – online buchen, ohne Warteschlange.</p>
+            <div class="hero-cta">
+              <a class="btn btn-primary btn-lg" href="#tickets">Tickets kaufen</a>
+              <a class="btn btn-ghost btn-lg" href="#warenkorb">Zum Warenkorb</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+            <div class="ticket-art"><span class="ta-title">TAGESTICKET</span><span class="ta-sub">Demo Erlebniswelt</span><span class="ta-code"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Diese Variante nutzt <strong>nur offizielle Enviso-Widget-Elemente</strong>: <code>enviso-offer-overview</code>,
+          <code>enviso-ticket-flow</code>, <code>enviso-basket-flow</code>, <code>enviso-basket-button</code>,
+          <code>enviso-basket-expiry-countdown</code>, <code>enviso-ticket-order-complete-step</code>.
+          Kein eigener API-Aufruf, keine eigenen Angebotskarten. Unser JavaScript blendet nur Bereiche ein/aus und setzt Attribute aus dokumentierten Events.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKETS: official offer overview -->
+    <section class="view" data-view="tickets" aria-label="Tickets">
+      <div class="page-head"><div class="wrap"><h1>Tickets</h1><p>Wähle ein Angebot und klicke auf „Tickets“.</p></div></div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Element <code>&lt;enviso-offer-overview offer-type="ticket" included-offer-ids="[…]"&gt;</code> lädt und zeigt die Angebote selbst.
+          Dokumentiertes Event <code>buyticketsclick</code> → wir zeigen den Buchungsbereich mit <code>&lt;enviso-ticket-flow offer-id="…"&gt;</code>.</p>
+        </div>
+        <div class="card-surface" id="mount-offers"></div>
+      </div>
+    </section>
+
+    <!-- BOOKING: official ticket flow -->
+    <section class="view" data-view="buchen" aria-label="Buchung">
+      <div class="page-head"><div class="wrap"><a href="#tickets" class="back-link">← Alle Angebote</a><h1>Tickets buchen</h1></div></div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Element <code>&lt;enviso-ticket-flow offer-id="…"&gt;</code> enthält Ticketauswahl, Datum/Zeitfenster und den Button
+          „In den Warenkorb“ – die Reservierung legt das Element selbst an. Das Warenkorb-Symbol oben zählt danach hoch.
+          Weiter geht es über „Zum Warenkorb“ (der Ticket-Flow selbst hat dafür kein dokumentiertes Event).</p>
+        </div>
+        <div class="card-surface" id="mount-flow"></div>
+        <div class="actions">
+          <a class="btn btn-ghost" href="#tickets">Weitere Tickets</a>
+          <a class="btn btn-primary" href="#warenkorb">Zum Warenkorb</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BASKET + CHECKOUT: official basket flow -->
+    <section class="view" data-view="warenkorb" aria-label="Warenkorb und Kasse">
+      <div class="page-head"><div class="wrap"><h1>Warenkorb &amp; Kasse</h1>
+        <enviso-basket-expiry-countdown threshold="30"></enviso-basket-expiry-countdown>
+      </div></div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Element <code>&lt;enviso-basket-flow&gt;</code>: Bestellübersicht (ändern/löschen) → Meine Info → Zahlung, alles im Element.
+          Die Zahlung legt die Bestellung an (Event <code>ordercreated</code>), danach <code>paymentverified</code>/<code>paymentfailed</code>.
+          Im dokumentierten Slot <code>continueShopping</code> steckt nur ein normaler Link zurück zu den Tickets.
+          Countdown: <code>&lt;enviso-basket-expiry-countdown threshold="30"&gt;</code>.</p>
+        </div>
+        <div class="card-surface">
+          <enviso-basket-flow id="basket-flow">
+            <a slot="continueShopping" class="btn btn-ghost" href="#tickets">Weiter einkaufen</a>
+          </enviso-basket-flow>
+        </div>
+      </div>
+    </section>
+
+    <!-- DONE: official order complete step -->
+    <section class="view" data-view="fertig" aria-label="Abschluss">
+      <div class="page-head"><div class="wrap"><h1>Abschluss</h1></div></div>
+      <div class="wrap section">
+        <div class="devinfo">
+          <h3>Was passiert hier?</h3>
+          <p>Element <code>&lt;enviso-ticket-order-complete-step order-id status failed&gt;</code>; Werte aus den dokumentierten Events
+          <code>ordercreated</code> und <code>paymentverified</code>/<code>paymentfailed</code>. Status immer serverseitig prüfen.</p>
+        </div>
+        <div class="card-surface" id="mount-done"></div>
+      </div>
+    </section>
+
+    <div class="wrap"><p id="status" class="status" aria-live="polite"></p></div>
+  </main>
+
+  <details class="dev-panel">
+    <summary>Entwickler-Panel <span class="dev-count" id="dev-count">0</span></summary>
+    <div class="dev-body">
+      <p class="small muted">Dokumentierte Events, nur Name und nicht-persönliche Felder.</p>
+      <ol id="eventlog" class="eventlog"></ol>
+    </div>
+  </details>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <div class="logo logo-footer"><span class="logo-mark" aria-hidden="true"></span><span class="logo-text">Demo <strong>Erlebniswelt</strong></span></div>
+        <p class="small">Fiktiver Demo-Shop zum Testen von Ticket-Web-Components in einer Staging-Umgebung.</p>
+      </div>
+      <div><h3>Impressum (Demo)</h3><p class="small">Platzhalter – keine echten Angaben. Demo Erlebniswelt, Musterstraße 1, 00000 Musterstadt.</p></div>
+      <div><h3>Datenschutz (Demo)</h3><p class="small">Platzhalter – Testseite. Bitte keine echten personenbezogenen Daten eingeben.</p></div>
+      <div>
+        <h3>Weitere Ansichten</h3>
+        <p class="small"><a data-carry href="./index.html">Komplett-Widget (ein Code-Schnipsel)</a><br>
+        <a data-carry href="./steps.html">Eigener Shop (mit eigenem Code)</a></p>
+      </div>
+    </div>
+    <div class="wrap footer-bottom small">© Demo – nur zu Testzwecken</div>
+  </footer>
+
+  <script src="./shop-simple.js"></script>
+</body>
+</html>
