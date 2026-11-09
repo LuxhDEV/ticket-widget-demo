@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Ticket Widget Demo</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main>
+    <h1>Ticket Widget Demo</h1>
+    <p class="lead">
+      Static staging demo for the Enviso ticketing widget.
+      Credentials are supplied only via URL query parameters and are not stored.
+    </p>
+
+    <section id="setup" class="card notice" aria-live="polite">
+      <h2>Configuration required</h2>
+      <p>
+        Open this page with the required query parameters. Values are used only in memory for
+        this page load. Nothing is written to browser storage, cookies, or logs.
+      </p>
+      <ul>
+        <li><code>apikey</code> – widget API key (required)</li>
+        <li><code>salespoint</code> – sales point id (required)</li>
+        <li><code>offers</code> – optional comma-separated offer ids</li>
+        <li><code>offer</code> – optional single offer id (direct detail view)</li>
+        <li><code>lang</code> / <code>locale</code> – optional language and locale</li>
+        <li><code>tenant</code> – optional; accepted for compatibility, not a documented widget setting</li>
+        <li><code>apiurl</code> – optional ticketing widget API base; default is staging</li>
+      </ul>
+      <p>
+        Example shape (replace placeholders yourself, do not commit real values):
+        <code>?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code>
+      </p>
+      <p>
+        Docs:
+        <a href="https://help.vintia.com/enviso/developers/ticketing-widget/en/getting-started.html">Getting started</a>
+      </p>
+    </section>
+
+    <section id="widget-root" class="card hidden" aria-label="Ticket widget"></section>
+    <p id="status" class="status" aria-live="polite"></p>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
