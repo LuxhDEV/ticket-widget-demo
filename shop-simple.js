@@ -2,8 +2,8 @@
   'use strict';
 
   // Widget-only demo shop. Everything shop-related (offers, ticket selection, date/time slot,
-  // add to basket, basket, customer form, payment, confirmation) is done by official Enviso
-  // web components. This script only:
+  // add to basket, basket, customer form, payment, confirmation, login / visitor profile)
+  // is done by official Enviso web components. This script only:
   //   1. reads the URL parameters into window.enviso.settings and loads the components,
   //   2. shows/hides page sections (hash navigation),
   //   3. sets attributes on widget elements from documented widget events.
@@ -18,7 +18,10 @@
     C + 'basket/enviso-basket-button-element.js',
     // The docs list basket/enviso-basket-expiry-countdown.js; the CDN serves the bundle under this name:
     C + 'basket/enviso-basket-expiry-countdown-element.js',
-    C + 'tickets/enviso-ticket-order-complete-step-element.js'
+    C + 'tickets/enviso-ticket-order-complete-step-element.js',
+    // Official profile button (login, sign-up, my orders / details / relations / sign-out).
+    // Docs path is auth/enviso-profile-element.js (staging + production).
+    C + 'auth/enviso-profile-element.js'
   ];
 
   var params = new URLSearchParams(window.location.search);

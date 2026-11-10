@@ -65,6 +65,7 @@ the page script.
 
 | Section | Element |
 |---|---|
+| Header login / visitor account | `<enviso-profile>` (official profile button: sign in, sign up, my orders / details / relations, sign out) |
 | Header basket icon (with item count) | `<enviso-basket-button>` inside a plain link to `#warenkorb` |
 | `#tickets` | `<enviso-offer-overview offer-type="ticket" included-offer-ids="[…]" sort-by-include-offer-ids>` |
 | `#buchen` | `<enviso-ticket-flow offer-id="…">` (ticket selection, date/time slot, "add to basket" – all inside the element) |
@@ -81,7 +82,12 @@ does not switch to the basket by itself (the header icon counts up; the user cli
 or drawer; offer cards and all forms use the widget's design (adjust via theme variables/CSS parts only).
 
 Component paths: the docs list `basket/enviso-basket-expiry-countdown.js`; the staging CDN serves the bundle as
-`basket/enviso-basket-expiry-countdown-element.js`.
+`basket/enviso-basket-expiry-countdown-element.js`. The profile button is documented at
+`auth/enviso-profile-element.js` (same path on staging and production).
+
+The official profile UI is a header button with a dropdown and dialogs, not a separate page. A custom `#konto`
+section is therefore not used. On the all-in-one widget (`index.html`) the same feature is the `show-auth`
+attribute on `<enviso-ticket-widget>`.
 
 ## Local preview
 

@@ -236,4 +236,5 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 
 /* shop.html (widget-only variant) */
 .widget-basket-link { display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+.header-actions enviso-profile { display: inline-flex; align-items: center; }
 .page-head enviso-basket-expiry-countdown { display: block; margin-top: .5rem; }
