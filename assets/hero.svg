@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="Illustration: Landschaft mit Riesenrad">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe8f3"/><stop offset="1" stop-color="#f4fafc"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" fill="url(#sky)"/>
+  <circle cx="1030" cy="80" r="42" fill="#f6c453"/>
+  <path d="M0 270 C200 200 360 230 520 260 S860 210 1200 250 V360 H0Z" fill="#9fd3b8"/>
+  <path d="M0 300 C240 260 420 300 640 300 S980 270 1200 290 V360 H0Z" fill="#5fb08a"/>
+  <g transform="translate(300 170)" stroke="#1f4e79" stroke-width="4" fill="none">
+    <circle r="95"/><circle r="12" fill="#1f4e79"/>
+    <g stroke-width="2.5">
+      <line x1="-95" y1="0" x2="95" y2="0"/><line x1="0" y1="-95" x2="0" y2="95"/>
+      <line x1="-67" y1="-67" x2="67" y2="67"/><line x1="-67" y1="67" x2="67" y2="-67"/>
+    </g>
+    <line x1="0" y1="0" x2="-55" y2="125"/><line x1="0" y1="0" x2="55" y2="125"/>
+  </g>
+  <g fill="#0f9d8a">
+    <rect x="290" y="62" width="20" height="14" rx="3"/><rect x="385" y="160" width="20" height="14" rx="3"/>
+    <rect x="290" y="258" width="20" height="14" rx="3"/><rect x="195" y="160" width="20" height="14" rx="3"/>
+    <rect x="357" y="94" width="20" height="14" rx="3"/><rect x="223" y="94" width="20" height="14" rx="3"/>
+    <rect x="357" y="226" width="20" height="14" rx="3"/><rect x="223" y="226" width="20" height="14" rx="3"/>
+  </g>
+  <g fill="#1f4e79">
+    <path d="M620 300 L680 200 L740 300Z" opacity=".85"/>
+    <rect x="700" y="230" width="90" height="70" rx="6" fill="#e8743b"/>
+    <path d="M690 232 L745 190 L800 232Z" fill="#c95a28"/>
+  </g>
+  <g fill="#ffffff" opacity=".9">
+    <ellipse cx="520" cy="70" rx="60" ry="18"/><ellipse cx="560" cy="60" rx="40" ry="16"/>
+    <ellipse cx="860" cy="110" rx="70" ry="18"/><ellipse cx="900" cy="98" rx="40" ry="15"/>
+  </g>
+</svg>
