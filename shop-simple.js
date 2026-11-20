@@ -27,6 +27,12 @@
   var params = new URLSearchParams(window.location.search);
   function p(a, b) { return (params.get(a) || (b ? params.get(b) : '') || '').trim(); }
 
+  // Official attribute is configuration-id on <enviso-ticket-widget> only (see app.js / index.html).
+  // enviso-profile, ticket-flow and basket-flow have no such attribute. The URL param is still
+  // accepted here so shop and index share the same query string; it is not sent by these elements.
+  var DEFAULT_CONFIGURATION_ID = '2253a1d6-2da2-4378-881d-45279046f3ab';
+  var configurationId = p('config', 'configuration-id') || p('configurationId') || DEFAULT_CONFIGURATION_ID;
+
   var apiKey = p('apikey', 'apiKey');
   var salesPointId = Number(p('salespoint', 'salesPoint'));
   var apiUrl = p('apiurl', 'apiUrl') || 'https://api.staging-enviso.io/ticketwidgetapi/';
@@ -134,9 +140,15 @@
   }
 
   function start() {
-    if (window.location.search) {
+    var carry = window.location.search;
+    if (configurationId && !p('config') && !p('configuration-id') && !p('configurationId')) {
+      var usp = new URLSearchParams(window.location.search);
+      usp.set('config', configurationId);
+      carry = '?' + usp.toString();
+    }
+    if (carry) {
       document.querySelectorAll('a[data-carry]').forEach(function (a) {
-        a.href = a.getAttribute('href').split('?')[0] + window.location.search;
+        a.href = a.getAttribute('href').split('?')[0] + carry;
       });
     }
     $('#dev-toggle').addEventListener('change', function (e) {

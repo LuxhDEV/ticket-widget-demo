@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Tickets kaufen – gestyltes Widget (Demo)</title>
+  <style>
+    :root {
+      --brand: #1f4e79;      /* primary */
+      --accent: #0f9d8a;     /* secondary */
+      --ink: #23303b;
+      --muted: #6b7785;
+      --line: #dde5ec;
+      --bg: #f5f8fa;
+      --font-heading: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+    .page-hero { position: relative; max-height: 320px; overflow: hidden; }
+    .page-hero img { display: block; width: 100%; height: 260px; object-fit: cover; }
+    .page-hero h1 { position: absolute; left: 50%; bottom: 1.2rem; transform: translateX(-50%); margin: 0; padding: .4em 1em;
+      font-family: var(--font-heading); font-size: clamp(1.4rem, 3vw, 2.2rem); color: #fff; background: var(--brand); border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(31, 78, 121, .25); white-space: nowrap; }
+    main { max-width: 1180px; margin: 0 auto; padding: 1.5rem 1rem 6rem; }
+    .lead { color: var(--muted); margin: .5rem 0 1.5rem; }
+    .setup { background: #fff; border: 2px solid var(--line); border-radius: 16px; padding: 1rem 1.5rem; }
+    .setup code { background: var(--bg); padding: 0 .3em; border-radius: 4px; }
+    .hidden { display: none !important; }
+    .enviso-container { background: #fff; border-radius: 20px; padding: 1.5rem; box-shadow: 0 3px 10px rgba(31, 78, 121, .07); }
+    .enviso-loading-message { color: var(--muted); }
+    .payment-methods { margin-top: 2.5em; }
+    .payment-methods h3 { font-size: .95rem; color: var(--muted); font-weight: 600; margin: 0 0 .6em; }
+    .payment-methods__logos { display: flex; flex-wrap: wrap; gap: .5em; }
+    .payment-methods__logo { min-width: 85px; padding: .45em .8em; text-align: center; font-size: .85rem; font-weight: 700;
+      border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+    .status { font-size: .85rem; color: var(--muted); margin-top: 1rem; }
+    footer { text-align: center; font-size: .8rem; color: var(--muted); padding: 1rem; }
+    footer a { color: var(--brand); }
+  </style>
+</head>
+<body>
+  <header class="page-hero">
+    <img src="./assets/hero.svg" alt="">
+    <h1>Tickets kaufen</h1>
+  </header>
+
+  <main>
+    <p class="lead">Wähle dein Ticket, den Tag und ggf. das Zeitfenster. Bezahlt wird direkt im Widget.</p>
+
+    <section id="setup" class="setup hidden" aria-live="polite">
+      <h2>Konfiguration fehlt</h2>
+      <p>Seite mit URL-Parametern öffnen (Werte bleiben nur im Speicher dieser Seite):</p>
+      <ul>
+        <li><code>apikey</code> – Widget-API-Key (Pflicht)</li>
+        <li><code>salespoint</code> – Verkaufspunkt-ID (Pflicht)</li>
+        <li><code>offers</code> – Angebots-IDs, kommagetrennt (optional)</li>
+        <li><code>lang</code> – Sprache, setzt <code>&lt;html lang&gt;</code> (optional, Standard <code>de</code>)</li>
+        <li><code>terms</code>, <code>privacy</code> – Links zu AGB/Datenschutz (optional)</li>
+        <li><code>adyenClientKey</code>, <code>fusionAuthClientId</code>, <code>fusionAuthClientRedirectUri</code> – optional, werden nur gesetzt, wenn angegeben</li>
+      </ul>
+      <p>Beispiel: <code>?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
+    </section>
+
+    <div class="enviso-container">
+      <div class="enviso-loading-message"><p>Der Ticketshop wird geladen …</p></div>
+      <div class="enviso-placeholder"></div>
+
+      <!-- Look & Feel: nur über <enviso-style> und CSS-Variablen, keine Eingriffe ins Shadow-DOM per JS -->
+      <enviso-style hidden>
+        :host { --enviso-primary-color: #1f4e79; --enviso-secondary-color: #0f9d8a; --enviso-tertiary-color: #1f4e79; }
+        enviso-offer-filters, .enviso-offer-filters-wrapper { display: none; }
+        @media only screen and (min-width: 1000px) {
+          .enviso-tickets { grid-template-columns: 1fr 1fr 1fr; }
+          :host enviso-ticket-item { min-height: 8em; }
+        }
+        .enviso-tickets:not(.enviso-tickets-mobile) { max-width: 100%; margin-right: 0; grid-gap: 1em; }
+        .enviso-tickets:not(.enviso-tickets-mobile) enviso-ticket-item { margin: 0; }
+        :host enviso-ticket-item { background-color: #fff; border: 2px solid #dde5ec; padding: 1em 1.5em; border-radius: 20px; box-shadow: rgba(31, 78, 121, .07) 0 3px 10px; }
+        .enviso-ticket-item-wrapper { justify-content: space-between; min-height: unset !important; gap: .8em; }
+        header.enviso-offer-name > span { font-weight: bold; font-size: 1.15em; text-transform: uppercase; letter-spacing: .02em; }
+        .enviso-offer-actions enviso-button[data-testid="enviso-offer-card-info-button"] { display: none; }
+        .enviso-amount-of-tickets { display: none; }
+        span.enviso-time-selection-step-header-description { display: none; }
+        .enviso-calendars-header { margin-bottom: 0; }
+        .enviso-ticket-widget-offer-name { color: var(--enviso-primary-color); font-weight: bold; margin-bottom: .5em; }
+        .enviso-ticket-widget-offers { margin: 0; }
+        .enviso-offer-info { padding: 1.3em; }
+        nav.enviso-offer-actions > enviso-button + enviso-button { background-color: #0f9d8a; color: #fff; border-left: 0; height: 2.9em; transition: background-color .2s; }
+        nav.enviso-offer-actions > enviso-button + enviso-button:hover { background-color: #0c8273; }
+        .enviso-steps-header, .enviso-steps-header:last-child { text-align: left; }
+        .enviso-steps-header-wrapper, .enviso-steps-header-progress { max-width: 100%; }
+        .enviso-steps-header-progress { margin-bottom: 1em; }
+        enviso-calendar { border: 0; }
+        .enviso-dates .enviso-day { padding: .4em .2em .6em; font-weight: bold; border: 1.5px solid #dde5ec; border-radius: 10px; }
+        .enviso-day.enviso-disabled { color: rgb(74 74 74 / 40%); background: none; }
+        .enviso-dates .enviso-day.enviso-selected { background-color: #0f9d8a !important; border: 0 !important; color: #fff; outline: none; }
+        .enviso-price-per-day { color: #1f4e79; font-size: 11px; line-height: 11px; margin: -2px 0 0; font-weight: bold; }
+        .enviso-dates .enviso-day.enviso-selected .enviso-price-per-day { color: #fff; }
+        .enviso-dialog-content { padding: 2em; }
+        .enviso-dialog-backdrop { background: rgba(0, 0, 0, .5); }
+      </enviso-style>
+      <enviso-style for="enviso-ticket-widget" hidden>
+        :host { background-color: transparent; text-align: left; position: unset !important; }
+      </enviso-style>
+      <enviso-style for="enviso-offer-card">
+        :host { border-radius: 16px; overflow: hidden; border: 2px solid #dde5ec; box-shadow: rgba(31, 78, 121, .07) 0 3px 10px; }
+        nav.enviso-offer-actions { border-top: 0; }
+        .enviso-offer-picture { aspect-ratio: 2 / 1; width: auto !important; object-fit: cover; }
+      </enviso-style>
+      <enviso-style for="enviso-ticket-selection-step" hidden>
+        .promotions { display: none; }
+        .enviso-header-info { display: none !important; }
+      </enviso-style>
+      <enviso-style for="enviso-ticket-item">
+        enviso-button { border-radius: 12px; }
+      </enviso-style>
+      <enviso-style for="enviso-numeric-up-down">
+        :host { width: unset !important; height: unset !important; border: 2px solid var(--enviso-secondary-color); border-radius: 100px; padding: .3em; }
+        enviso-button[icon-name="minus"] { background-color: transparent; }
+        enviso-button[icon-name="plus"] { border: 2px solid var(--enviso-secondary-color); color: #fff; border-radius: 100%; margin: 0; height: 30px !important; width: 30px !important; background-color: var(--enviso-secondary-color); }
+        .enviso-nud-wrapper.vertical { flex-direction: row; align-items: center; gap: .3em; }
+        .enviso-nud-wrapper #enviso-value { width: 35px; font-weight: bold; border: 0; text-align: center; }
+      </enviso-style>
+      <enviso-style for="enviso-button" hidden>
+        :host { outline: none !important; }
+        :host([primary]) { background-color: #0f9d8a; border-radius: 14px; color: #fff; box-shadow: rgba(15, 157, 138, .25) 0 6px 16px; }
+        :host([primary]:hover) { background-color: #0c8273; }
+        :host([data-testid="enviso-offer-card-purchase-button"]) .enviso-btn { font-weight: bold; text-transform: uppercase; font-size: 1.05em; letter-spacing: .03em; }
+      </enviso-style>
+      <enviso-style for="enviso-calendar" hidden>
+        .enviso-calendar-container { padding: 0; }
+      </enviso-style>
+      <enviso-style for="enviso-calendar-month" hidden>
+        :host { min-height: unset; }
+        .enviso-month { border-collapse: separate; border-spacing: 6px; }
+        .enviso-month-text { padding: 0 !important; margin-bottom: .5em; font-weight: bold; color: var(--enviso-primary-color); }
+      </enviso-style>
+      <enviso-style for="enviso-timeslot" hidden>
+        :host { width: fit-content; }
+        .enviso-timeslot-button { width: fit-content; border-radius: 10px; border: 1.5px solid #dde5ec; }
+        :host([selected]) .enviso-timeslot-button { background: #0f9d8a; color: #fff; border-color: #0f9d8a; }
+        :host([selected]) .enviso-timeslot-button:after { display: none; }
+        .enviso-timeslot-info .enviso-amount-of-tickets + div { display: none; }
+      </enviso-style>
+      <enviso-style for="enviso-notice">
+        :host { margin: 2em 0; border-color: var(--enviso-primary-color); border-width: 2px; border-radius: 14px; color: var(--enviso-primary-color); }
+      </enviso-style>
+      <enviso-style for="enviso-ticket-flow" hidden>
+        .enviso-ticket-flow-bottom-buttons { align-items: center; gap: 1.5em; }
+        .enviso-mobile > .enviso-ticket-flow-bottom-buttons { gap: 0; box-sizing: border-box; position: fixed; width: 100%; left: 0; bottom: 0; background: #fff; z-index: 999; padding: 0 1em; border-top: 1px solid #dde5ec; box-shadow: rgba(31, 78, 121, .07) 0 -6px 20px; }
+      </enviso-style>
+      <enviso-style for="enviso-basket-flow" hidden>
+        .enviso-basket-bottom-buttons { align-items: center; gap: 1.5em; }
+        .enviso-mobile > .enviso-basket-bottom-buttons { gap: 0; box-sizing: border-box; position: fixed; width: 100%; left: 0; bottom: 0; background: #fff; z-index: 999; padding: 0 1em; border-top: 1px solid #dde5ec; box-shadow: rgba(31, 78, 121, .07) 0 -6px 20px; }
+      </enviso-style>
+      <enviso-style for="enviso-basket-overview">
+        .enviso-basket-footer { padding: 0; margin-right: 0; }
+        .enviso-basket-total-amount { text-align: right; font-weight: bold; }
+      </enviso-style>
+      <enviso-style for="enviso-ticket-basket-item" hidden>
+        :host { border-radius: 14px; }
+      </enviso-style>
+      <enviso-style for="enviso-basket-discount" hidden>
+        .enviso-discount-open > input { width: 100%; min-height: 45px; border-radius: 12px; border: 1.5px solid #dde5ec; padding-inline: .8em; }
+      </enviso-style>
+      <enviso-style for="enviso-dynamic-form">
+        .dynamic-fields.enviso-dynamic-fields { display: grid; grid-template-columns: repeat(2, 1fr); grid-column-gap: 2em; }
+        @media (max-width: 700px) { .dynamic-fields.enviso-dynamic-fields { grid-template-columns: 1fr; } }
+      </enviso-style>
+      <enviso-style for="enviso-dialog">
+        .enviso-dialog-content { border-radius: 16px; }
+      </enviso-style>
+      <enviso-style for="enviso-loader-overlay" hidden>
+        :host { position: unset !important; }
+      </enviso-style>
+      <enviso-style for="enviso-adyen-payment">
+        .adyen-checkout__payment-method { border-radius: 12px; }
+        .adyen-checkout__payment-method__header { font-size: 1em; }
+        .adyen-checkout__payment-method__name, .adyen-checkout__label__text { font-weight: bold; }
+        .adyen-checkout__button--pay { background: #0f9d8a; border-radius: 14px; }
+      </enviso-style>
+    </div>
+
+    <p id="status" class="status" aria-live="polite"></p>
+  </main>
+
+  <footer>Staging-Demo – Bilder: eigene SVG-Illustration (assets/hero.svg). <a id="home-link" href="./index.html">Zur Übersicht</a></footer>
+
+  <script src="./widget-styled.js"></script>
+</body>
+</html>

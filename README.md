@@ -87,7 +87,12 @@ Component paths: the docs list `basket/enviso-basket-expiry-countdown.js`; the s
 
 The official profile UI is a header button with a dropdown and dialogs, not a separate page. A custom `#konto`
 section is therefore not used. On the all-in-one widget (`index.html`) the same feature is the `show-auth`
-attribute on `<enviso-ticket-widget>`.
+attribute on `<enviso-ticket-widget>`, plus `configuration-id` (URL parameter `config`, defaulting to the
+staging “Demo Shop” configuration). `enviso-profile` and the other standalone shop elements do not accept
+that attribute.
+
+OAuth login/register uses `enviso.settings.fusionAuthClientId` from the staging widget `config/env.js`
+(not from the widget-configuration API).
 
 ## Local preview
 
@@ -108,3 +113,28 @@ Then open the page with query parameters. GitHub Pages is preferred for payment 
 ## Source docs
 
 - Official Enviso ticketing widget developer docs: "Getting started", "Pre-requisites for configuration", "Widget step components"
+
+## Styled widget page (`widget-styled.html`)
+
+`widget-styled.html` + `widget-styled.js` embed the all-in-one `<enviso-ticket-widget>` (staging) in a typical
+production pattern:
+
+- `window.enviso.settings` block first (apiKey/salespoint from URL, staging `ticketingWidgetApi`, `testPayment: true`,
+  `language` from `<html lang>`; optional `adyenClientKey`, `fusionAuthClientId`, `fusionAuthClientRedirectUri` are
+  set **only** if passed as URL parameters), then `loader.js` and the component bundles.
+- A placeholder is replaced by `<enviso-ticket-widget>` with `show-prices`, `show-prices-type="highestUnit"`,
+  `included-offer-ids`, `sort-by-include-offer-ids`, `preferred-dates`, optional `terms`/`privacy`, `newsletter`,
+  plus `enviso-offer-overview image-click-action="tickets"`, `enviso-time-selection auto-select-visit-time` and the
+  slots `below-basket-items` / `below-ticket-widget` (payment methods as plain text badges).
+- Look & feel only via `<enviso-style for="…">` blocks (offer cards, ticket items, numeric up/down, buttons, calendar,
+  timeslots, basket, discount field, form, dialog, Adyen payment) and `--enviso-*-color` variables. No shadow-DOM
+  scripting, no internal APIs.
+
+Open: `widget-styled.html?apikey=YOUR_KEY&salespoint=YOUR_SALESPOINT&offers=OFFER_A,OFFER_B[&lang=de]`
+
+Image credits: `assets/hero.svg` is an original illustration made for this demo (no third-party assets).
+Offer images inside the widget come from the Enviso offer configuration.
+
+Local testing: serve the folder on `http://localhost:3000` (e.g. `python3 -m http.server 3000`). From that origin the
+staging order and the Adyen test drop-in work; from `http://127.0.0.1:<port>` the `POST ticketwidgetapi/orders`
+response is blocked (no CORS header), and other origins (e.g. GitHub Pages) need the Adyen origin to be allowed.

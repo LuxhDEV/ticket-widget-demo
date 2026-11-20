@@ -20,6 +20,12 @@
     var locale = (params.get('locale') || '').trim();
     var tenant = (params.get('tenant') || params.get('tenantKey') || '').trim();
     var apiUrl = (params.get('apiurl') || params.get('apiUrl') || '').trim();
+    var configurationId = (
+      params.get('config') ||
+      params.get('configuration-id') ||
+      params.get('configurationId') ||
+      ''
+    ).trim() || '2253a1d6-2da2-4378-881d-45279046f3ab';
 
     var offerIds = [];
     if (offersRaw) {
@@ -43,7 +49,8 @@
       language: language,
       locale: locale,
       tenantProvided: Boolean(tenant),
-      apiUrl: apiUrl
+      apiUrl: apiUrl,
+      configurationId: configurationId
     };
   }
 
@@ -96,6 +103,12 @@
     el.setAttribute('offer-type', 'ticket');
     el.setAttribute('show-prices', '');
     el.setAttribute('disable-auto-visit-time-selection', '');
+    el.setAttribute('show-auth', '');
+    // Documented on the all-in-one widget (Sales portal: set Configuration ID on the HTML component).
+    // Fetches GET ticketwidgetapi/widgetconfigurations/{id} and applies showAuth, terms, etc.
+    if (config.configurationId) {
+      el.setAttribute('configuration-id', config.configurationId);
+    }
 
     if (Number.isFinite(config.offerId) && config.offerId > 0) {
       el.setAttribute('offer-id', String(config.offerId));
@@ -137,6 +150,8 @@
     if (a && window.location.search) a.href = './steps.html' + window.location.search;
     var b = document.getElementById('shop-link');
     if (b && window.location.search) b.href = './shop.html' + window.location.search;
+    var c = document.getElementById('styled-link');
+    if (c && window.location.search) c.href = './widget-styled.html' + window.location.search;
   }
 
   function start() {

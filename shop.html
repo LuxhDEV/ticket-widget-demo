@@ -46,7 +46,7 @@
     <section id="setup" class="wrap hidden">
       <div class="panel">
         <h1>Konfiguration fehlt</h1>
-        <p>URL-Parameter: <code>apikey</code> und <code>salespoint</code> (Pflicht), optional <code>offers</code>, <code>lang</code>, <code>locale</code>, <code>apiurl</code>.</p>
+        <p>URL-Parameter: <code>apikey</code> und <code>salespoint</code> (Pflicht), optional <code>offers</code>, <code>lang</code>, <code>locale</code>, <code>apiurl</code>, <code>config</code> (Widget-Konfigurations-ID; Default ist die Staging-Konfiguration „Demo Shop“).</p>
         <p>Beispiel: <code>shop.html?apikey=YOUR_KEY&amp;salespoint=YOUR_SALESPOINT&amp;offers=OFFER_A,OFFER_B</code></p>
       </div>
     </section>
@@ -77,7 +77,8 @@
           <code>enviso-ticket-flow</code>, <code>enviso-basket-flow</code>, <code>enviso-basket-button</code>,
           <code>enviso-basket-expiry-countdown</code>, <code>enviso-ticket-order-complete-step</code>,
           <code>enviso-profile</code> (Login und Kundenkonto oben rechts).
-          Kein eigener API-Aufruf, keine eigenen Angebotskarten. Unser JavaScript blendet nur Bereiche ein/aus und setzt Attribute aus dokumentierten Events.</p>
+          Kein eigener API-Aufruf, keine eigenen Angebotskarten. Unser JavaScript blendet nur Bereiche ein/aus und setzt Attribute aus dokumentierten Events.
+          Die dokumentierte Widget-Konfigurations-ID (<code>configuration-id</code>) gibt es nur am Komplett-Widget <code>enviso-ticket-widget</code> (siehe index.html), nicht an <code>enviso-profile</code>.</p>
         </div>
       </div>
     </section>
